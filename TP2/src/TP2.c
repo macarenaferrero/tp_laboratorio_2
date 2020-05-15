@@ -19,7 +19,7 @@
 
 
 int main(void) {
-	Employee Array[EMPLEADOS_LEN];
+	Employee arrayEmp[EMPLEADOS_LEN];
 	int option;
 	int indiceAuxiliar;
 	int idEmpleado =0;
@@ -27,16 +27,18 @@ int main(void) {
 	int auxOrder;
 	float promedioSalarios;
 	int sumaAuxiliar;
+	int i;
 
-	if(emp_initEmployees(Array, EMPLEADOS_LEN)==0)
+
+	if(emp_initEmployees(arrayEmp, EMPLEADOS_LEN)==0)
 	{
 		printf("Array inicializado correctamente. \n\n");
 	}
 
+	emp_addEmployeesForzada(arrayEmp, EMPLEADOS_LEN, &idEmpleado, "Roberto", "Ferrero", 15.700, 1, 0);
+	emp_addEmployeesForzada(arrayEmp, EMPLEADOS_LEN, &idEmpleado, "Macarena", "Ferrero", 17.700, 2, 1);
+	emp_addEmployeesForzada(arrayEmp, EMPLEADOS_LEN, &idEmpleado, "Silvia", "Dutra", 13.900, 3, 2);
 
-	emp_addEmployeesForzada(Array, EMPLEADOS_LEN,&idEmpleado, "Roberto", "Ferrero", 10, 1, 0);
-	emp_addEmployeesForzada(Array, EMPLEADOS_LEN,&idEmpleado, "Roberto", "Ferrero", 20, 2, 1);
-	emp_addEmployeesForzada(Array, EMPLEADOS_LEN,&idEmpleado, "Macarena", "Ferrero", 30, 3, 2);
 
 
 	do
@@ -46,10 +48,10 @@ int main(void) {
 			switch(option)
 			{
 			case 1:
-				indiceAuxiliar = emp_getEmptyIndex(Array, EMPLEADOS_LEN);
+				indiceAuxiliar = emp_getEmptyIndex(arrayEmp, EMPLEADOS_LEN);
 				if(indiceAuxiliar >=0)
 				{
-					if(!emp_addEmployees(Array, EMPLEADOS_LEN, indiceAuxiliar, &idEmpleado))
+					if(!emp_addEmployees(arrayEmp, EMPLEADOS_LEN, indiceAuxiliar, &idEmpleado))
 					{
 						printf("\nCarga realizada con exito\n");
 					}
@@ -60,47 +62,81 @@ int main(void) {
 				}
 				break;
 			case 2:
-				emp_printEmployees(Array, EMPLEADOS_LEN);
-				if(!utn_getNumero(&auxiliarId, "Ingrese el ID que desea modificar\n", "ID incorrecto\n", 0, 10000, 2))
-				{
-					indiceAuxiliar = emp_findEmployeeById(Array, EMPLEADOS_LEN, auxiliarId);
-					if(indiceAuxiliar>= 0 && emp_modificarArray(Array, EMPLEADOS_LEN, indiceAuxiliar)==0)
+
+					if(arrayEmp[i].isEmpty ==0)
 					{
-						printf("Mofificacion realizada con exito\n\n");
+						for(i=0;i<EMPLEADOS_LEN;i++)
+						{
+
+						emp_printEmployees(arrayEmp, EMPLEADOS_LEN);
+						if(!utn_getNumero(&auxiliarId, "Ingrese el ID que desea modificar\n", "ID incorrecto\n", 0, 10000, 2))
+						{
+							indiceAuxiliar = emp_findEmployeeById(arrayEmp, EMPLEADOS_LEN, auxiliarId);
+							if(indiceAuxiliar>= 0 && emp_modificarArray(arrayEmp, EMPLEADOS_LEN, indiceAuxiliar)==0)
+							{
+								printf("Mofificacion realizada con exito\n\n");
+							}
+							else
+							{
+								printf("ID no encontrado\n\n");
+							}
+						}
+						}
 					}
 					else
 					{
-						printf("ID no encontrado\n\n");
+						printf("\nNo hay clientes cargados\n");
 					}
-				}
+
 				break;
 			case 3:
-				emp_printEmployees(Array, EMPLEADOS_LEN);
-				if(!utn_getNumero(&auxiliarId, "Ingrese el ID que desea eliminar\n", "ID incorrecto\n", 0, 10000, 2))
+				if(arrayEmp[i].isEmpty ==0)
 				{
-					indiceAuxiliar = emp_findEmployeeById(Array, EMPLEADOS_LEN, auxiliarId);
-					if(indiceAuxiliar>= 0 && emp_removeEmployee(Array, EMPLEADOS_LEN, auxiliarId)==0)
+					for(i=0;i<EMPLEADOS_LEN;i++)
 					{
-						printf("Eliminación realizada con exito\n\n");
-					}
-					else
+					emp_printEmployees(arrayEmp, EMPLEADOS_LEN);
+					if(!utn_getNumero(&auxiliarId, "Ingrese el ID que desea eliminar\n", "ID incorrecto\n", 0, 10000, 2))
 					{
-						printf("ID no encontrado\n\n");
+						indiceAuxiliar = emp_findEmployeeById(arrayEmp, EMPLEADOS_LEN, auxiliarId);
+						if(indiceAuxiliar>= 0 && emp_removeEmployee(arrayEmp, EMPLEADOS_LEN, auxiliarId)==0)
+						{
+							printf("Eliminación realizada con exito\n\n");
+						}
+						else
+						{
+							printf("ID no encontrado\n\n");
+						}
 					}
+					}
+				}
+				else
+				{
+					printf("\nNo hay clientes cargados\n");
 				}
 				break;
 			case 4:
-				if(!utn_getNumero(&auxOrder, "Desea imprimir:\n0.Forma Ascendente\n1.Forma descendente\n", "Opcion incorrecta\n", 0, 1, 2))
+				if(arrayEmp[i].isEmpty ==0)
 				{
-				emp_sortEmployees(Array, EMPLEADOS_LEN, auxOrder);
-				printf("\n\nListado por APELLIDO Y SECTOR\n\n");
-				emp_printEmployees(Array, EMPLEADOS_LEN);
+					for(i=0;i<EMPLEADOS_LEN;i++)
+					{
+
+					if(!utn_getNumero(&auxOrder, "Desea imprimir:\n0.Forma Ascendente\n1.Forma descendente\n", "Opcion incorrecta\n", 0, 1, 2))
+					{
+					emp_sortEmployees(arrayEmp, EMPLEADOS_LEN, auxOrder);
+					printf("\n\nListado por APELLIDO Y SECTOR\n\n");
+					emp_printEmployees(arrayEmp, EMPLEADOS_LEN);
+					}
+					sumaAuxiliar = emp_promediarSalarios(arrayEmp, EMPLEADOS_LEN, &promedioSalarios);
+					printf("\nLa suma total de los salarios es %d y el promedio es %.2f\n", sumaAuxiliar, promedioSalarios);
+					printf("\nLos empleados que igual o superan el promedio son:\n");
+					emp_imprimirEmpleadosSuperanPromedio(arrayEmp, EMPLEADOS_LEN);
+					break;
+					}
+					}
+				else
+				{
+					printf("\nNo hay clientes cargados\n");
 				}
-				sumaAuxiliar = emp_promediarSalarios(Array, EMPLEADOS_LEN, &promedioSalarios);
-				printf("\nLa suma total de los salarios es %d y el promedio es %.2f\n", sumaAuxiliar, promedioSalarios);
-				printf("\nLos empleados que igual o superan el promedio son:\n");
-				emp_imprimirEmpleadosSuperanPromedio(Array, EMPLEADOS_LEN);
-				break;
 			}
 		}
 	}while(option != 5);
