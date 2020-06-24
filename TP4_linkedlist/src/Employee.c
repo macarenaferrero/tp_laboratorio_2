@@ -575,8 +575,38 @@ int employee_ordenarID(void* auxUno, void* auxDos)
 	return retorno;
 }
 
+/**
+ * \brief Calcula Total
+ * \param EmpUno void* Puntero al elemento que se busca clasificar
+ * \return int Retorna -1 (ERROR)
+ * 					    1(OK)
+ */
 
-int calcularEmpleadosHsMayoresA(void* auxElemento)
+int calcularEmpleadosLiquidacion(void* auxElemento)
+{
+	int retorno = -1;
+	Employee* auxiliarElemento = (Employee*)auxElemento;
+	int auxSueldo;
+
+	if(auxiliarElemento != NULL && !employee_getSueldo(auxiliarElemento,&auxSueldo))
+	{
+		retorno = auxSueldo;
+	}
+
+	return retorno;
+}
+
+
+/**
+ * \brief Informa horas bajo criterio
+ * \param EmpUno void* Puntero al elemento que se busca clasificar
+ * \return int Retorna -1 (ERROR)
+ * 					    1(OK CRITERO)
+ * 					    0(NO CRITERIO)
+ */
+
+
+int calcularElementosHsMayoresA(void* auxElemento)
 {
 	int retorno = -1;
 	Employee* auxiliarElemento = (Employee*)auxElemento;
@@ -596,4 +626,58 @@ int calcularEmpleadosHsMayoresA(void* auxElemento)
 	}
 	return retorno;
 }
+
+
+
+/**
+ * \brief Compara sueldos Total
+ * \param EmpUno void* Puntero al elemento que se busca clasificar
+ * \return int Retorna -1 (ERROR)
+ * 					    auxValor(OK)
+ */
+
+int compararSueldoPorValor(void* auxElemento, int valor,int index)
+{
+	Employee* auxiliarElemento = (Employee*)auxElemento;
+	int auxSueldo;
+
+	if(auxiliarElemento != NULL && valor >= 0 && index >= 0)
+	{
+		employee_getSueldo(auxiliarElemento,&auxSueldo);
+		if(index==0)
+		{
+			valor = auxSueldo;
+		}
+		else if (auxSueldo > valor)
+		{
+			valor = auxSueldo;
+		}
+	}
+	return valor;
+}
+
+
+/**
+ * \brief Informa horas bajo criterio
+ * \param EmpUno void* Puntero al elemento que se busca clasificar
+ * \return int Retorna -1 (ERROR)
+ * 					    1(OK CRITERO)
+ * 					    0(NO CRITERIO)
+ */
+
+
+int calcularElementos(void* auxElemento)
+{
+	int retorno = -1;
+
+	if(auxElemento != NULL)
+	{
+		retorno = 1;
+	}	else
+	{
+		retorno = 0;
+	}
+	return retorno;
+}
+
 

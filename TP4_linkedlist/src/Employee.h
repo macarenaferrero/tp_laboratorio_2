@@ -37,11 +37,10 @@ int employee_imprimir(Employee* this);
 int employee_ordenarNombre(void* EmpUno, void* EmpDos);
 int employee_ordenarID(void* auxUno, void* auxDos);
 int employee_imprimirGral(void* this);
-int calcularEmpleadosHsMayoresA(void* auxElemento);
-
-
-
-
+int calcularElementosHsMayoresA(void* auxElemento);
+int calcularEmpleadosLiquidacion(void* auxElemento);
+int compararSueldoPorValor(void* auxElemento, int valor,int index);
+int calcularElementos(void* auxElemento);
 
 
 #endif // employee_H_INCLUDED

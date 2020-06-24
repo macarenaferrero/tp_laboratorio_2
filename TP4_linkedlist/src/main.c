@@ -30,6 +30,9 @@ int main()
     int auxIndice;
     int contadorAux;
     LinkedList* sublista;
+    LinkedList* sublistaII;
+    int to;
+    int from;
     LinkedList* listaEmpleados = ll_newLinkedList();
     do{
         	utn_getNumero(&option,"1. Cargar los datos de los empleados desde el archivo data.csv (modo texto)\n"
@@ -39,18 +42,19 @@ int main()
         						  "5. Baja de empleado\n"
         						  "6. Listar empleados\n"
         						  "7. Ordenar empleados por nombre\n"
-        						  "8. Guardar los datos de los empleados en el archivo data.csv (modo texto)\n"
+        						  "8. Ordenar empleados por ID\n"
         						  "9. Guardar los datos de los empleados en el archivo data.csv (modo binario)\n"
-        						  "10. Ordenar empleados por ID\n"
-        						  "11. Buscar empleado contenido\n"
+        						  "10. Guardar los datos de los empleados en el archivo data.csv (modo texto)\n"
+        						  "11. Buscar empleado\n"
         						  "12. Clonar lista\n"
-        						  "13. Crear subista de los primeros 10 empleados\n"
+        						  "13. Crear sublista\n"
         						  "14. Corroborar sublista\n"
-        						  "15. Filtrar\n"
-        						  "16. Count\n"
-        						  "17. Salir\n",
+        						  "15. Filtrar por más de 300 horas trabajadas\n"
+        						  "16. El sueldo más alto\n"
+        						  "17. Liquidación total mensual\n"
+        						  "18. Salir\n",
     							  "Opción inválida\n",
-    							  1,17,2);
+    							  1,18,2);
             switch(option)
             {
                 case 1:
@@ -93,19 +97,24 @@ int main()
                 	controller_sortEmployee(listaEmpleados);
                     break;
                 case 8:
-                	controller_saveAsText("data.csv",listaEmpleados);
+                	controller_sortEmployeebyID(listaEmpleados);
                     break;
                 case 9:
                 	controller_saveAsBinary("data.dat",listaEmpleados);
                     break;
                 case 10:
-                	controller_sortEmployeebyID(listaEmpleados);
+                	controller_saveAsText("data.csv",listaEmpleados);
                 	break;
                 case 11:
-                	auxEmployee = ll_get(listaEmpleados,1);
+                	utn_getNumero(&to,"Ingrese ID\n","ID incorrecto\n",0,ll_len(listaEmpleados),2);
+                	auxEmployee = ll_get(listaEmpleados,to-1);
                 	controller_containsElemento(listaEmpleados,auxEmployee);
 					auxIndice = ll_indexOf(listaEmpleados,auxEmployee);
-					printf("El empleado se encuentra en el indice %d\n", auxIndice);
+					if(auxIndice != -1)
+					{
+						printf("El empleado se encuentra en el indice %d\n", auxIndice);
+						employee_imprimir(auxEmployee);
+					}
                 	break;
                 case 12:
                 	if(ll_clone(listaEmpleados) != NULL)
@@ -116,19 +125,27 @@ int main()
                 	}
                 	break;
                 case 13:
-                	if(ll_subList(listaEmpleados,0,10) != NULL)
+                	if(!utn_getNumero(&from,"Ingrese desde donde quiere crear la sublista\n"
+                					,"Valor incorecto\n", 0, ll_len(listaEmpleados),2) &&
+									!utn_getNumero(&to,"Ingrese hasta donde quiere crear la sublista\n"
+									,"Valor incorecto\n", 0, ll_len(listaEmpleados),2))
                 	{
-                		printf("Sublista creada\n");
-                		sublista = ll_subList(listaEmpleados,0,10);
-                		ll_map(sublista,employee_imprimirGral);
+						sublistaII = ll_subList(listaEmpleados,from-1,to);
+						if(sublistaII != NULL)
+						{
+						ll_map(sublistaII,employee_imprimirGral);
+						contadorAux = ll_count(sublistaII,calcularElementos);
+						printf("Sublista creada\n");
+						printf("Hay %d empleados seleccionados\n\n",contadorAux);
+						}
                 	}
                 	break;
                 case 14:
-                	if(ll_containsAll(listaEmpleados,sublista)==1)
+                	if(ll_containsAll(listaEmpleados,sublistaII)==1)
                 	{
-                		printf("Los elementos de sublista están contenidos\n");
+                		printf("Los elementos de sublista están contenidos\n\n");
                 	}
-                	else if(ll_containsAll(listaEmpleados,sublista)==0)
+                	else if(ll_containsAll(listaEmpleados,sublistaII)==0)
                 	{
                 		printf("Al menos un elemento no está contenido\n");
                 	}
@@ -138,20 +155,27 @@ int main()
                 	}
                 	break;
                 case 15:
-                	sublista = ll_filter(listaEmpleados,calcularEmpleadosHsMayoresA);
+                	sublista = ll_filter(listaEmpleados,calcularElementosHsMayoresA);
                 	if(sublista != NULL)
                 	{
                 		ll_map(sublista,employee_imprimirGral);
                 		printf("Lista filtrada\n");
+                		contadorAux = ll_count(listaEmpleados,calcularElementosHsMayoresA);
+                		printf("Hay %d empleados que superan las 300 hs. trabajadas\n",contadorAux);
                 	}
                 	break;
                 case 16:
-                	contadorAux = ll_count(listaEmpleados,calcularEmpleadosHsMayoresA);
-                	printf("Hay %d empleados que superan las 300 hs. trabajadas\n",contadorAux);
-                	break;
+                	auxIndice = ll_reduce(listaEmpleados,compararSueldoPorValor);
+                	ll_map(listaEmpleados,employee_imprimirGral);
+                	printf("El mayor sueldo es %d\n",auxIndice);
 
+                	break;
+                case 17:
+					contadorAux = ll_countAcumulador(listaEmpleados,calcularEmpleadosLiquidacion);
+					printf("Liquidacion total mensual: $%d\n\n",contadorAux);
+					break;
             }
-        }while(option != 17);
+        }while(option != 18);
     return 0;
 }
 

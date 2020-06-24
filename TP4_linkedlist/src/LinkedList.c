@@ -447,7 +447,7 @@ int ll_containsAll(LinkedList* this,LinkedList* this2)
 {
     int returnAux = -1;
     int index=0;
-    void* auxiliar;
+    void* auxiliar = NULL;
 
      if(this != NULL && this2 != NULL)
      {
@@ -455,7 +455,7 @@ int ll_containsAll(LinkedList* this,LinkedList* this2)
  		for(index=0;index<ll_len(this2);index++)
  		{
  			auxiliar = ll_get(this,index);
- 			if(ll_contains(this2,auxiliar)==0)
+ 			if(ll_contains(this,auxiliar)==0)
  			{
  				returnAux = 0;
  				break;
@@ -483,17 +483,14 @@ LinkedList* ll_subList(LinkedList* this,int from,int to)
 {
     LinkedList* cloneArray = NULL;
     int index=0;
-    void* auxiliar;
+    void* auxiliar = NULL;
     if(this != NULL && from >= 0 && to >= 0 && from < to && to <= ll_len(this)&& from <= ll_len(this))
     {
     	cloneArray = ll_newLinkedList();
-    	for(index=0;index<ll_len(this);index++)
+    	for(index=from;index<to;index++)
 		{
 			auxiliar = ll_get(this,index);
-			if(!ll_add(cloneArray,auxiliar))
-			{
-
-			}
+			ll_add(cloneArray,auxiliar);
 		}
     }
     return cloneArray;
@@ -631,7 +628,7 @@ LinkedList* ll_filter(LinkedList* this, int (*pFunc)(void*))
 }
 
 
-/** \brief Filtra los elementos de la lista utilizando la funcion criterio recibida como parametro
+/** \brief Cuenta los elementos de la lista utilizando la funcion criterio recibida como parametro
  * \param pList LinkedList* Puntero a la lista
  * \param pFunc (*pFunc) Puntero a la funcion criterio
  * \return int Retorna  (-1) Error: si el puntero a la listas es NULL
@@ -659,4 +656,57 @@ int ll_count(LinkedList* this, int (*pFunc)(void*))
 
 }
 
+
+
+/** \brief Cuenta los elementos de la lista utilizando la funcion criterio recibida como parametro
+ * \param pList LinkedList* Puntero a la lista
+ * \param pFunc (*pFunc) Puntero a la funcion criterio
+ * \return int Retorna  (-1) Error: si el puntero a la listas es NULL
+                                ( 0) Si ok
+ */
+int ll_countAcumulador(LinkedList* this, int (*pFunc)(void*))
+{
+	int retorno = -1;
+    int index;
+    int sueldoAcum = 0;
+    void* auxElemento = NULL;
+
+    if(this != NULL && pFunc != NULL )
+    {
+			for(index=0;index<ll_len(this);index++)
+			{
+				auxElemento = ll_get(this,index);
+				sueldoAcum+= pFunc(auxElemento);
+			}
+			retorno = sueldoAcum;
+	}
+    return retorno;
+
+}
+
+
+/** \brief Informa valor del elemento de la lista utilizando la funcion criterio recibida como parametro
+ * \param pList LinkedList* Puntero a la lista
+ * \param pFunc (*pFunc) Puntero a la funcion criterio
+ * \return int Retorna  (-1) Error: si el puntero a la listas es NULL
+                                ( 0) Si ok
+ */
+
+int ll_reduce(LinkedList* this, int (*pFunc)(void*, int, int))
+{
+	int index;
+	void* auxElemento = NULL;
+	int valor = 0;
+
+	if(this != NULL && pFunc != NULL)
+	{
+		for(index=0;index < ll_len(this);index++)
+		{
+			auxElemento = ll_get(this, index);
+			valor = pFunc(auxElemento,valor,index);
+		}
+	}
+
+	return valor;
+}
 

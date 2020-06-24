@@ -229,6 +229,8 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
 	return retorno;
 }
 
+
+
 /** \brief Ordenar empleados
  * \param pArrayListEmployee LinkedList* Puntero a la lista a ser ordenada
  * \return int 0 OK, (-1) ERROR
@@ -246,7 +248,7 @@ int controller_sortEmployee(LinkedList* pArrayListEmployee)
 		if(pArrayListEmployee != NULL)
 		{
 			retorno=0;
-			if(!utn_getNumero(&opcion,"Ingrese órden [1-ascendente / 0-descendente]\n","Valor inválido\n",0,1,2))
+			if(!utn_getNumero(&opcion,"Ingrese órden [1-descendente / 0-ascendente]\n","Valor inválido\n",0,1,2))
 			{
 				printf("Espere, se está cargando la lista\n");
 				if(ll_sort(pArrayListEmployee,employee_pFordenarNombre,opcion)==0)
